@@ -1,0 +1,73 @@
+let jogadorX = 200;
+let jogadorY = 200;
+let tamanho = 40;
+let pontos = 0;
+
+let bolas = []; // lista de bolas (x, y, tamanho)
+
+function setup() {
+  createCanvas(500, 400);
+  for (let i = 0; i < 5; i++) {
+    adicionaBola();
+  }
+}
+
+function draw() {
+  background(220);
+
+  // mostrar jogador
+  fill(0, 150, 255);
+  rect(jogadorX, jogadorY, tamanho, tamanho);
+
+  // mostrar bolas
+  fill(255, 100, 100);
+  for (let i = 0; i < bolas.length; i++) {
+    ellipse(bolas[i].x, bolas[i].y, bolas[i].t);
+  }
+
+  // verificar colisão
+  for (let i = bolas.length - 1; i >= 0; i--) {
+    if (dist(jogadorX, jogadorY, bolas[i].x, bolas[i].y) < (tamanho / 2 + bolas[i].t / 2)) {
+      bolas.splice(i, 1); // remove bola
+      pontos++;
+    }
+  }
+
+  // mostrar pontos
+  fill(0);
+  textSize(20);
+  text("Pontos: " + pontos, 20, 30);
+
+  movimentaJogador();
+}
+
+// movimentação do jogador com setas
+function movimentaJogador() {
+  if (keyIsDown(LEFT_ARROW)) {
+    jogadorX -= 3;
+  }
+  if (keyIsDown(RIGHT_ARROW)) {
+    jogadorX += 3;
+  }
+  if (keyIsDown(UP_ARROW)) {
+    jogadorY -= 3;
+  }
+  if (keyIsDown(DOWN_ARROW)) {
+    jogadorY += 3;
+  }
+}
+
+// adicionar bola nova ao clicar com o mouse
+function mousePressed() {
+  adicionaBola();
+}
+
+// função para criar bola em posição aleatória
+function adicionaBola() {
+  let nova = {
+    x: random(width),
+    y: random(height),
+    t: random(20, 40)
+  };
+  bolas.push(nova);
+}
